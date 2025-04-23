@@ -1,7 +1,8 @@
+import os  # ✅ Make sure this is at the top!
 from flask import Flask, request, jsonify, render_template
 from src.main import get_response
 
-app = Flask(__name__)
+app = Flask(__name__)  # ✅ Note: double underscores, not _name_
 
 @app.route("/")
 def home():
@@ -14,4 +15,6 @@ def chat():
     return jsonify({"reply": response})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # ✅ This is needed for Render
+    app.run(debug=True, host="0.0.0.0", port=port)
+

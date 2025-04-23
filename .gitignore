@@ -1,0 +1,11 @@
+# .gitignore
+chatbot/
+__pycache__/
+*.pyc
+*.pkl
+*.log
+*.db
+.env
+
+data/*.pdf
+

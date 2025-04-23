@@ -3,3 +3,6 @@ sentence-transformers
 tensorflow
 numpy
 nltk
+Flask
+flask-cors
+gunicorn

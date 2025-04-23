@@ -1,0 +1,5 @@
+fitz  # (or use PyMuPDF)
+sentence-transformers
+tensorflow
+numpy
+nltk

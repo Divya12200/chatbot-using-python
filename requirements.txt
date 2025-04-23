@@ -1,4 +1,4 @@
-fitz  # (or use PyMuPDF)
+PyMuPDF  # (or use PyMuPDF)
 sentence-transformers
 tensorflow
 numpy

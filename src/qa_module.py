@@ -9,29 +9,28 @@ class QAModule:
     def answer(self, query):
         query_lower = query.lower()
 
-        # 🎉 Greet users
-        greetings = ["hi", "hello", "hey", "good morning", "good evening"]
-        if any(greet in query_lower for greet in greetings):
-            return "👋 Welcome to Huezone Solutions!\nHow can I assist you today?"
+        # 🎉 Greeting
+        if any(greet in query_lower for greet in ["hi", "hello", "hey", "good morning", "good evening"]):
+            return "👋 Welcome to Huezone Solutions! How can I assist you today?", 1.0
 
-        # 💰 Handle pricing/cost questions
+        # 💰 Price/cost-related questions
         if "price" in query_lower or "cost" in query_lower:
             return (
-                "💬 For cost-related queries, please contact us on WhatsApp: +91 9108684414"
-                "<br><br>🔗 <a href='https://www.indiamart.com/huezone-solutions/' target='_blank'>Visit us here</a>")
+                "🛒 Buy via IndiaMART or contact us on WhatsApp: +91 9108684414"
+                "<br><br>🔗 <a href='https://www.indiamart.com/huezone-solutions/' target='_blank'>Buy via IndiaMART</a>"
+            , 1.0)
 
-        # 🔍 Semantic search on PDF content
+        # 🔍 Try matching from PDF
         query_embedding = self.model.encode(query, convert_to_tensor=True)
         scores = util.cos_sim(query_embedding, self.embeddings)[0]
         best_idx = scores.argmax().item()
         best_score = scores[best_idx].item()
 
-        # ❓ Low confidence fallback
-        if best_score < 0.4:
-            return (
-                "❓ Sorry, I couldn't find anything relevant. Can you rephrase your question?"
-                "<br><br>🔗 <a href='https://www.indiamart.com/huezone-solutions/' target='_blank'>Visit us here</a>")
+        if best_score >= 0.4:
+            return self.chunks[best_idx], best_score
 
+        # ❌ Not found in PDF
         return (
-            f"{self.chunks[best_idx]}"
-            "<br><br>🔗 <a href='https://www.indiamart.com/huezone-solutions/' target='_blank'>Visit us here</a>")
+            "ℹ️ Please visit us via IndiaMART for more information."
+            "<br><br>🔗 <a href='https://www.indiamart.com/huezone-solutions/' target='_blank'>Visit us via IndiaMART</a>"
+        , best_score)
